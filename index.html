@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Recette K-Ekole</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap">
+<style>
+  :root{
+    --bg:#eef1f5; --surface:#fff; --raise:#f6f8fa; --text:#141821; --muted:#5b6472; --faint:#98a2b3;
+    --border:#e3e7ec; --border2:#eef1f4; --brand:#4f46e5; --brand-ink:#3730a3; --brand-bg:#eef0ff;
+    --ok:#15803d; --ok-bg:#dcfce7; --ko:#dc2626; --ko-bg:#fee2e2; --imp:#b45309; --imp-bg:#fef3c7;
+    --none:#94a3b8; --none-bg:#f1f5f9;
+    --sh:0 1px 2px rgba(16,24,40,.05),0 6px 20px rgba(16,24,40,.06);
+  }
+  :root:not([data-theme="light"]){ @media (prefers-color-scheme:dark){
+    --bg:#0c0e12; --surface:#161a21; --raise:#1e232c; --text:#e6e9ef; --muted:#9aa4b2; --faint:#6b7484;
+    --border:#282e38; --border2:#20252e; --brand:#8b83ff; --brand-ink:#c7c2ff; --brand-bg:#1c1a33;
+    --ok:#4ade80; --ok-bg:#0d2a1a; --ko:#f87171; --ko-bg:#3a1516; --imp:#fbbf24; --imp-bg:#332406;
+    --none:#64748b; --none-bg:#1a1f27; --sh:0 1px 2px rgba(0,0,0,.4),0 10px 28px rgba(0,0,0,.35);
+  }}
+  :root[data-theme="dark"]{
+    --bg:#0c0e12; --surface:#161a21; --raise:#1e232c; --text:#e6e9ef; --muted:#9aa4b2; --faint:#6b7484;
+    --border:#282e38; --border2:#20252e; --brand:#8b83ff; --brand-ink:#c7c2ff; --brand-bg:#1c1a33;
+    --ok:#4ade80; --ok-bg:#0d2a1a; --ko:#f87171; --ko-bg:#3a1516; --imp:#fbbf24; --imp-bg:#332406;
+    --none:#64748b; --none-bg:#1a1f27; --sh:0 1px 2px rgba(0,0,0,.4),0 10px 28px rgba(0,0,0,.35);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:"Manrope",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1120px;margin:0 auto;padding:24px 18px 80px}
+  a{color:var(--brand)}
+  /* Header */
+  .hero{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px 26px;box-shadow:var(--sh);margin-bottom:18px}
+  .hero h1{font-size:27px;font-weight:800;letter-spacing:-.02em;margin:0}
+  .hero .lead{color:var(--muted);margin:8px 0 0;max-width:74ch;font-size:14.5px}
+  .meta{display:flex;gap:22px;flex-wrap:wrap;margin-top:16px;font-size:13px}
+  .meta b{display:block;color:var(--faint);font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-size:10.5px;margin-bottom:2px}
+  .meta code{background:var(--raise);border:1px solid var(--border);border-radius:6px;padding:1px 7px;font-size:12.5px}
+  .ident{display:flex;gap:16px;flex-wrap:wrap;margin-top:16px;padding-top:14px;border-top:1px solid var(--border2)}
+  .ident label{display:flex;flex-direction:column;gap:4px;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--faint)}
+  .ident input{font:inherit;font-size:14px;font-weight:600;text-transform:none;letter-spacing:0;color:var(--text);padding:7px 11px;border-radius:9px;border:1px solid var(--border);background:var(--raise);min-width:210px}
+  /* toolbar */
+  .toolbar{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);
+    border:1px solid var(--border);border-radius:14px;padding:12px 14px;margin-bottom:18px;box-shadow:var(--sh)}
+  .bar{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+  .progress{flex:1;min-width:180px;height:10px;border-radius:99px;background:var(--none-bg);overflow:hidden;display:flex}
+  .progress span{height:100%;display:block;transition:width .3s}
+  .stats{display:flex;gap:6px;flex-wrap:wrap}
+  .chip{font-size:12px;font-weight:700;border-radius:99px;padding:4px 10px;border:1px solid transparent;cursor:pointer;user-select:none}
+  .chip[data-on="true"]{outline:2px solid currentColor;outline-offset:1px}
+  .c-ok{background:var(--ok-bg);color:var(--ok)} .c-ko{background:var(--ko-bg);color:var(--ko)}
+  .c-imp{background:var(--imp-bg);color:var(--imp)} .c-none{background:var(--none-bg);color:var(--muted)}
+  .row2{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:10px}
+  input[type=search],select{font:inherit;font-size:13px;padding:7px 11px;border-radius:9px;border:1px solid var(--border);background:var(--surface);color:var(--text)}
+  input[type=search]{flex:1;min-width:180px}
+  .btn{font:inherit;font-weight:700;font-size:12.5px;padding:7px 13px;border-radius:9px;border:1px solid var(--border);background:var(--raise);color:var(--text);cursor:pointer}
+  .btn.primary{background:var(--brand);color:#fff;border-color:transparent}
+  .btn:hover{filter:brightness(1.03)}
+  /* TOC */
+  .toc{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+  .toc a{font-size:12.5px;font-weight:600;text-decoration:none;color:var(--muted);background:var(--surface);border:1px solid var(--border);border-radius:99px;padding:5px 12px}
+  .toc a:hover{color:var(--brand);border-color:var(--brand)}
+  /* module */
+  .mod{background:var(--surface);border:1px solid var(--border);border-radius:16px;box-shadow:var(--sh);margin-bottom:16px;overflow:hidden}
+  .mod-h{padding:16px 20px;border-bottom:1px solid var(--border2);display:flex;gap:14px;align-items:flex-start}
+  .mod-h .num{flex:0 0 auto;width:30px;height:30px;border-radius:9px;background:var(--brand-bg);color:var(--brand-ink);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px}
+  .mod-h h2{margin:0;font-size:17px;font-weight:800;letter-spacing:-.01em}
+  .mod-h p{margin:3px 0 0;color:var(--muted);font-size:13px;max-width:82ch}
+  .mod-h .cnt{margin-left:auto;flex:0 0 auto;font-size:12px;color:var(--faint);white-space:nowrap;font-weight:700}
+  /* case */
+  .case{padding:14px 20px;border-bottom:1px solid var(--border2)}
+  .case:last-child{border-bottom:0}
+  .case.hidden{display:none}
+  .case-top{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+  .case-id{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;color:var(--faint);font-weight:700}
+  .case-obj{font-weight:700;font-size:14.5px}
+  .sev{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.03em;padding:2px 7px;border-radius:99px}
+  .sev.Majeur{background:var(--ko-bg);color:var(--ko)} .sev.Mineur{background:var(--none-bg);color:var(--muted)}
+  .kv{margin-top:8px;display:grid;grid-template-columns:120px 1fr;gap:4px 14px;font-size:13.5px}
+  .kv .k{color:var(--faint);font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.03em;padding-top:2px}
+  .kv ol{margin:0;padding-left:18px} .kv li{margin-bottom:2px}
+  .exp{color:var(--text)} .exp b{color:var(--brand-ink)}
+  .verdict{margin-top:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .v-btn{font:inherit;font-weight:700;font-size:12.5px;padding:6px 14px;border-radius:9px;border:1px solid var(--border);background:var(--surface);color:var(--muted);cursor:pointer}
+  .v-btn[data-sel="ok"][aria-pressed="true"]{background:var(--ok-bg);color:var(--ok);border-color:var(--ok)}
+  .v-btn[data-sel="ko"][aria-pressed="true"]{background:var(--ko-bg);color:var(--ko);border-color:var(--ko)}
+  .v-btn[data-sel="imp"][aria-pressed="true"]{background:var(--imp-bg);color:var(--imp);border-color:var(--imp)}
+  .note{flex:1;min-width:200px;font:inherit;font-size:13px;padding:7px 11px;border-radius:9px;border:1px solid var(--border);background:var(--raise);color:var(--text);resize:vertical;min-height:36px}
+  footer{color:var(--faint);font-size:12px;text-align:center;margin-top:26px;line-height:1.7}
+  @media(max-width:640px){.kv{grid-template-columns:1fr}.kv .k{padding-top:8px}}
+  @media print{
+    .toolbar,.toc,.theme-toggle{display:none!important}
+    body{background:#fff} .mod,.hero{box-shadow:none;break-inside:avoid}
+    .case{break-inside:avoid}
+  }
+  .theme-toggle{position:fixed;bottom:16px;right:16px;z-index:30;width:42px;height:42px;border-radius:50%;border:1px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer;box-shadow:var(--sh);font-size:18px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <h1>Recette fonctionnelle — K-Ekole</h1>
+    <p class="lead">Guide de tests destiné au prestataire en charge de la recette fonctionnelle. Chaque module est décrit (rôle et objectif), puis décomposé en cas de test avec l'<strong>objectif</strong>, les <strong>étapes</strong>, le <strong>résultat attendu</strong>, et une zone pour statuer <strong>OK / KO / À améliorer</strong> et laisser une <strong>note</strong>. Vos saisies sont conservées dans ce navigateur ; utilisez « Exporter » pour récupérer le rapport.</p>
+    <div class="meta">
+      <div><b>Environnement</b><code id="env-url">https://…</code></div>
+      <div><b>Comptes de test</b>Fournis par l'éditeur (DG, comptable, coordinateur, enseignant…)</div>
+      <div><b>Légende sévérité</b><span class="sev Majeur">Majeur</span> bloquant · <span class="sev Mineur">Mineur</span> confort</div>
+      <div><b>Version</b><code>2026‑09</code></div>
+    </div>
+    <div class="ident">
+      <label>Testeur<input type="text" id="tester" placeholder="Nom du testeur"></label>
+      <label>Date de recette<input type="date" id="tdate"></label>
+      <label>Version testée<input type="text" id="tver" placeholder="ex. dev 2026-09-03"></label>
+    </div>
+  </header>
+
+  <div class="toolbar">
+    <div class="bar">
+      <div class="progress" title="Progression">
+        <span class="c-ok"   id="p-ok"   style="width:0;background:var(--ok)"></span>
+        <span class="c-ko"   id="p-ko"   style="width:0;background:var(--ko)"></span>
+        <span class="c-imp"  id="p-imp"  style="width:0;background:var(--imp)"></span>
+      </div>
+      <div class="stats">
+        <span class="chip c-ok"   data-f="ok"   id="s-ok">✔ OK 0</span>
+        <span class="chip c-ko"   data-f="ko"   id="s-ko">✗ KO 0</span>
+        <span class="chip c-imp"  data-f="imp"  id="s-imp">▲ À améliorer 0</span>
+        <span class="chip c-none" data-f="none" id="s-none">○ Non testé 0</span>
+      </div>
+    </div>
+    <div class="row2">
+      <input type="search" id="q" placeholder="Rechercher (module, objectif, id…)">
+      <select id="modsel"><option value="">Tous les modules</option></select>
+      <button class="btn" id="btn-export">⬇ Exporter (CSV)</button>
+      <button class="btn" id="btn-print">🖨 Imprimer</button>
+      <button class="btn" id="btn-reset">↺ Réinitialiser</button>
+    </div>
+  </div>
+
+  <nav class="toc" id="toc"></nav>
+  <main id="app"></main>
+  <footer>
+    Recette K-Ekole · document interactif · les statuts et notes sont enregistrés localement (par navigateur).<br>
+    Astuce : « Exporter (CSV) » produit un fichier ouvrable dans Excel avec statut + note de chaque test.
+  </footer>
+</div>
+<button class="theme-toggle" id="theme-toggle" title="Thème clair / sombre">◐</button>
+
+<script>
+/* ===================== DONNÉES DE RECETTE ===================== */
+const SECTIONS = [
+ { code:'B', title:'Connexion, accès & configuration',
+   desc:"Authentification par code établissement, gestion des comptes utilisateurs et des rôles, onboarding sécurisé (mot de passe temporaire), réglages de l'établissement (identité, matricule, branding, langues).",
+   cases:[
+   {id:'B01',obj:"Connexion réussie",pre:"Compte DG actif",steps:["Ouvrir l'URL de l'application (voir « Environnement » en haut de ce guide)","Renseigner le Code établissement, l'email et le mot de passe du compte DG","Cliquer « Se connecter »"],exp:"Redirection vers le Tableau de bord ; session ouverte.",sev:'Majeur'},
+   {id:'B02',obj:"Connexion refusée",pre:"—",steps:["Sur l'écran de connexion, saisir un mot de passe volontairement erroné","Cliquer « Se connecter »"],exp:"Bandeau rouge « Échec de connexion » ; aucun accès.",sev:'Majeur'},
+   {id:'B03',obj:"Changement de langue (FR/EN/AR)",pre:"Écran de connexion",steps:["Sur l'écran de connexion, cliquer le sélecteur de langue (FR/EN/AR) en haut","Choisir une autre langue"],exp:"Toute l'interface bascule dans la langue choisie (l'arabe passe en RTL).",sev:'Mineur'},
+   {id:'B04',obj:"Création d'un utilisateur + rôles",pre:"users.write",steps:["Menu « Administration › Utilisateurs & Rôles », onglet « Utilisateurs »","Cliquer « + Nouvel utilisateur » : renseigner nom, email, site","Cocher un ou plusieurs rôles → Enregistrer","Repérer le compte créé dans la liste (badges de rôles)"],exp:"Compte créé, visible avec ses badges de rôles.",sev:'Majeur'},
+   {id:'B05',obj:"Mot de passe temporaire (1er login forcé)",pre:"users.write",steps:["Menu « Administration › Utilisateurs & Rôles » → « + Nouvel utilisateur »","Choisir l'option « mot de passe temporaire » → Enregistrer (noter le mot de passe affiché une seule fois)","Se déconnecter, se reconnecter avec ce compte et ce mot de passe"],exp:"Mot de passe affiché une fois ; écran bloquant de changement au 1er login.",sev:'Majeur'},
+   {id:'B06',obj:"Envoi des identifiants par email / repli messagerie",pre:"SMTP (ou repli)",steps:["Créer un utilisateur avec l'option « Envoyer les identifiants par email »","Si l'envoi échoue, utiliser « Ouvrir dans ma messagerie / Gmail »","Vérifier la réception (ou le brouillon pré-rempli)"],exp:"Email reçu (code, identifiant, mot de passe temporaire, lien) OU messagerie pré-remplie.",sev:'Majeur'},
+   {id:'B07',obj:"Création d'un rôle personnalisé",pre:"roles.write",steps:["Menu « Administration › Utilisateurs & Rôles », onglet « Rôles »","Cliquer « + Nouveau rôle », nommer le rôle","Cocher les permissions module par module → Enregistrer","Vérifier que les rôles marqués « Système » ne sont pas éditables"],exp:"Rôle créé ; les rôles « Système » restent non éditables ; ce qui est coché reflète bien les droits accordés.",sev:'Majeur'},
+   {id:'B08',obj:"Édition d'un rôle personnalisé",pre:"Un rôle personnalisé",steps:["Onglet « Rôles » → ouvrir un rôle personnalisé → modifier les permissions → Enregistrer","Se déconnecter puis se reconnecter avec un compte portant ce rôle","Vérifier que seuls les écrans autorisés sont accessibles"],exp:"Les changements prennent effet (accès aux écrans cochés uniquement).",sev:'Majeur'},
+   {id:'B09',obj:"Périmètre coordinateur (site/niveau/classe)",pre:"delegation.manage",steps:["Menu « Administration › Utilisateurs & Rôles » → ouvrir un coordinateur → « Accès / Périmètre »","Cocher un site / niveau / classe → Enregistrer","Se connecter en coordinateur et vérifier la restriction"],exp:"Le coordinateur ne voit que son périmètre (filtres et élèves limités).",sev:'Majeur'},
+   {id:'B10',obj:"Délégation temporaire puis révocation",pre:"Dialogue Accès",steps:["Dans le dialogue « Accès » d'un utilisateur → « Déléguer une permission » avec une échéance → Déléguer","Vérifier le statut « Active », puis cliquer « Révoquer »"],exp:"Délégation « Active » puis « Révoquée ».",sev:'Majeur'},
+   {id:'B11',obj:"Réglages : identité & devise",pre:"settings.write",steps:["Menu « Administration › Paramètres », section « Identité »","Modifier raison sociale, ville, devise → Enregistrer"],exp:"Sauvegardé ; la devise s'applique au formatage monétaire.",sev:'Mineur'},
+   {id:'B12',obj:"Réglages : matricule configurable",pre:"Réglages",steps:["Menu « Administration › Paramètres », section « Matricule »","Choisir le mode (auto / manuel / mixte) + préfixe → Enregistrer","Vérifier l'aperçu du matricule"],exp:"Aperçu du matricule mis à jour ; appliqué aux futures inscriptions.",sev:'Majeur'},
+   {id:'B13',obj:"Réglages : branding (couleur + logo)",pre:"Réglages",steps:["Menu « Administration › Paramètres », section « Apparence / Marque »","Choisir la couleur principale + téléverser le logo → Enregistrer"],exp:"Couleur de marque appliquée à l'interface ; logo enregistré (repris sur les documents).",sev:'Mineur'},
+   {id:'B14',obj:"Abonnement : demande de mise à niveau",pre:"Onglet Abonnement visible",steps:["Menu « Administration › Abonnement »","Choisir une formule supérieure → « Passer à … »"],exp:"« Demande envoyée » (traitée par l'éditeur).",sev:'Mineur'},
+ ]},
+ { code:'C', title:'Structure académique',
+   desc:"Ossature de l'établissement, à configurer dans l'ordre : Sites → Années & Trimestres → Niveaux → Classes → Matières. Plus la liste des « Documents à fournir » à l'inscription.",
+   cases:[
+   {id:'C01',obj:"Parcours guidé & sites / année",pre:"academic.write",steps:["Menu « Scolarité › Structure académique », onglet « Sites » → « + Ajouter un site », cocher « site principal »","Onglet « Années » → créer l'année + ses trimestres","Vérifier le bandeau rappelant l'ordre de configuration"],exp:"Bandeau d'ordre affiché ; site principal marqué ; année « en cours » + trimestres créés.",sev:'Majeur'},
+   {id:'C02',obj:"Gestion des trimestres (modal de confirmation)",pre:"Une année",steps:["Onglet « Années » → sur un trimestre, cliquer « Supprimer » (confirmer dans la modale)","Ré-ajouter / éditer un trimestre"],exp:"Suppression confirmée par modal ; ajout/édition possible ensuite.",sev:'Mineur'},
+   {id:'C03',obj:"Niveaux & classes",pre:"academic.write",steps:["Onglet « Niveaux » → « + Nouveau niveau »","Onglet « Classes » → « + Nouvelle classe » (nom + niveau)"],exp:"Niveau puis classe créés et disponibles.",sev:'Majeur'},
+   {id:'C04',obj:"Matières : coefficient + heures/semaine",pre:"Une classe + une matière",steps:["Onglet « Matières » → sélectionner une classe","« Affecter une matière », saisir le coefficient et les heures/semaine → Enregistrer"],exp:"Matière listée avec coefficient et volume horaire (ce dernier sert à la génération auto d'emploi du temps).",sev:'Majeur'},
+   {id:'C05',obj:"Documents à fournir : configuration",pre:"academic.write",steps:["Onglet « Documents à fournir » → « + Ajouter » (nom + case Obligatoire)","Désactiver puis réactiver un document","Ouvrir un formulaire d'inscription : vérifier qu'un document désactivé n'apparaît plus"],exp:"Liste enregistrée ; obligatoire/facultatif visible ; document désactivé masqué du formulaire.",sev:'Majeur'},
+   {id:'C06',obj:"Documents à fournir : édition en ligne",pre:"Un document existant",steps:["Onglet « Documents à fournir » → bouton ✏️ Modifier sur une ligne","Renommer + basculer Obligatoire/Facultatif → Enregistrer"],exp:"Le document est mis à jour sans suppression/recréation.",sev:'Mineur'},
+ ]},
+ { code:'D', title:'Inscriptions & admissions',
+   desc:"Pipeline d'admission : Préinscrit → Admis → Admis & confirmé → Inscrit (affecté à une classe). L'admission découle des étapes : Admettre (préinscrit→admis) puis Encaisser (frais d'inscription, puis mensualités pour confirmer). Inclut la candidature publique et la réinscription.",
+   cases:[
+   {id:'D01',obj:"Préinscription interne (saisie)",pre:"admissions.write",steps:["Menu « Scolarité › Inscriptions » → « + Nouvelle préinscription »","Renseigner identité, responsables, niveau souhaité → Enregistrer","Vérifier l'élève en colonne « Préinscrits »"],exp:"Élève en colonne « Préinscrits ».",sev:'Majeur'},
+   {id:'D02',obj:"Réinscription : recherche + pré-remplissage",pre:"Un ancien élève existe",steps:["Menu « Scolarité › Inscriptions » → « + Nouvelle préinscription »","En HAUT du formulaire, cocher « Réinscription »","Rechercher l'ancien élève (nom / matricule) et le sélectionner"],exp:"La case et la recherche sont EN HAUT ; les infos connues (identité + responsables) sont pré-remplies et restent modifiables.",sev:'Majeur'},
+   {id:'D03',obj:"Préinscrit → Admettre (sans paiement)",pre:"Un préinscrit",steps:["Menu « Scolarité › Inscriptions » → ouvrir un dossier « Préinscrit »","Cliquer « Admettre » (seule action proposée à ce stade)"],exp:"À l'étape Préinscrit, seule l'action « Admettre » est proposée ; l'élève passe « Admis ». Aucun encaissement à ce stade.",sev:'Majeur'},
+   {id:'D04',obj:"Boursier : validation avant admission",pre:"Préinscrit avec prise en charge",steps:["Ouvrir un préinscrit ayant une prise en charge / bourse","Tenter « Admettre » sans valider la PEC → constater le blocage","Valider la prise en charge puis « Admettre »"],exp:"Admettre bloqué tant que la PEC n'est pas validée, autorisé après.",sev:'Majeur'},
+   {id:'D05',obj:"Admis → Encaisser frais d'inscription",pre:"Un élève Admis ; frais d'inscription créé",steps:["Ouvrir un dossier « Admis » → cliquer « Encaisser »","Sélectionner uniquement les frais d'inscription → Valider"],exp:"À l'étape Admis, seule l'action « Encaisser » est proposée ; payer les frais d'inscription seuls maintient le statut « Admis ».",sev:'Majeur'},
+   {id:'D06',obj:"Encaisser mensualités → Admis & confirmé",pre:"Un élève Admis",steps:["Ouvrir un dossier « Admis » → « Encaisser »","Sélectionner frais d'inscription + 1 mois (ou plus) → Valider"],exp:"L'élève bascule en « Admis & confirmé » ; périodes couvertes ; pas de double facturation.",sev:'Majeur'},
+   {id:'D07',obj:"Admis & confirmé → Affectation seule",pre:"Un élève Admis & confirmé",steps:["Ouvrir un dossier « Admis & confirmé »","Observer les actions proposées"],exp:"Seule l'action « Affecter / Inscrire » (classe + année) est disponible à ce stade.",sev:'Majeur'},
+   {id:'D08',obj:"Affectation en classe",pre:"Élève Admis & confirmé",steps:["Sur un « Admis & confirmé », cliquer « Affecter / Inscrire »","Choisir la classe + l'année → Valider"],exp:"Élève scolarisé ; sort du pipeline d'inscription.",sev:'Majeur'},
+   {id:'D09',obj:"Rejet / réexamen",pre:"Un dossier",steps:["Sur un dossier, cliquer « Rejeter »","Depuis la colonne « Rejetés », cliquer « Reconsidérer »"],exp:"Passe en « Rejetés » puis peut revenir au pipeline.",sev:'Mineur'},
+   {id:'D10',obj:"Check-liste des documents dans le dossier",pre:"Documents à fournir configurés",steps:["Ouvrir le détail d'un dossier → section « Documents à fournir »","Cocher les pièces reçues et joindre un document manquant","Vérifier la progression + la liste des obligatoires manquants"],exp:"On coche les pièces reçues et on joint les manquantes ; progression + obligatoires manquants affichés.",sev:'Majeur'},
+   {id:'D11',obj:"Candidature publique en ligne",pre:"Formule onlineAdmissions ; admissions ouvertes",steps:["Ouvrir le lien public /admission/<code établissement> (hors connexion)","En haut, cocher « Réinscription » (facultatif) + saisir le matricule si connu","Remplir élève + tuteur, joindre les pièces → « Envoyer »","Noter la référence affichée"],exp:"Écran de confirmation + référence ; candidature en « Préinscrits » (badge en ligne) ; case réinscription + matricule en haut.",sev:'Majeur'},
+   {id:'D12',obj:"Suivi public de candidature",pre:"Une candidature déposée",steps:["Sur la page publique, carte « Suivre ma candidature »","Saisir la référence → « Suivre »"],exp:"Affiche « prénom — statut ».",sev:'Mineur'},
+ ]},
+ { code:'E', title:'Élèves (dossiers)',
+   desc:"Répertoire des élèves scolarisés : liste filtrable, fiche 360° (identité, parcours, notes, présences, finances, documents), édition, changement de classe, désactivation avec motif, export Excel personnalisable, accès portail.",
+   cases:[
+   {id:'E01',obj:"Liste filtrée aux scolarisés",pre:"Élèves de statuts variés",steps:["Menu « Scolarité › Élèves » (sans appliquer de filtre)","Observer la liste et les badges"],exp:"Seuls Admis & confirmés + Inscrits ; colonne Classe visible ; badge Nouveau/Réinscription.",sev:'Majeur'},
+   {id:'E02',obj:"Filtres site/niveau/classe/statut + type",pre:"Plusieurs classes",steps:["Menu « Scolarité › Élèves »","Appliquer les filtres Site / Niveau / Classe / Statut, la recherche, puis le filtre Nouveaux / Réinscrits"],exp:"La liste se restreint correctement ; le filtre Nouveaux/Réinscrits fonctionne.",sev:'Mineur'},
+   {id:'E03',obj:"Fiche élève 360°",pre:"Un élève",steps:["Menu « Scolarité › Élèves » → cliquer le nom d'un élève","Parcourir les onglets Aperçu / Identité / Notes / Présences & Discipline / Finances / Documents"],exp:"Toutes les infos regroupées ; l'onglet Présences liste aussi les JOURS d'absence (dates + motif) ; onglet Documents = check-liste.",sev:'Majeur'},
+   {id:'E04',obj:"Édition = même écran que l'inscription",pre:"students.write",steps:["Sur un élève, cliquer « Modifier »","Comparer le formulaire à celui de l'inscription"],exp:"Formulaire identique à l'inscription (identité + responsables + documents).",sev:'Mineur'},
+   {id:'E05',obj:"Changer de classe (même niveau)",pre:"Un élève inscrit (ENROLLED)",steps:["Sur un élève inscrit, cliquer « Changer de classe »","Vérifier que nom / prénom / matricule sont affichés","Choisir une classe du même niveau → Enregistrer"],exp:"Nom/prénom/matricule affichés ; seules les classes du même niveau proposées ; déplacement sans impact sur l'historique.",sev:'Majeur'},
+   {id:'E06',obj:"Désactiver un élève avec motif",pre:"students.write",steps:["Sur un élève, cliquer « Désactiver »","Saisir un motif (obligatoire) → confirmer"],exp:"Motif requis ; l'élève passe « Désactivé », sort des listes actives, historique conservé ; filtrable via statut « Désactivé ».",sev:'Majeur'},
+   {id:'E07',obj:"Réactiver un élève",pre:"Un élève désactivé",steps:["Menu « Scolarité › Élèves » → filtrer sur le statut « Désactivé »","Ouvrir l'élève → « Réactiver »"],exp:"L'élève redevient exploitable.",sev:'Mineur'},
+   {id:'E08',obj:"Suppression définitive (modale)",pre:"students.write",steps:["Sur un élève, cliquer « Supprimer »","Lire l'avertissement de la modale (« préférez Désactiver ») → confirmer"],exp:"Confirmation via une modale de l'application (avertissement « préférez Désactiver ») ; bloquée si l'élève a des inscriptions/factures.",sev:'Mineur'},
+   {id:'E09',obj:"Export Excel à colonnes personnalisées",pre:"students.read",steps:["Menu « Scolarité › Élèves » → bouton « Excel »","Cocher les colonnes voulues → « Exporter »"],exp:"Fichier .xlsx avec exactement les colonnes cochées (identité, contacts, responsables, niveau, réinscription…).",sev:'Majeur'},
+   {id:'E10',obj:"Accès portail parent/élève",pre:"Formule portails",steps:["Sur un élève, cliquer l'icône clé (générer l'accès portail)","Se connecter avec l'identifiant fourni sur « Mon espace »"],exp:"Portail : identité, résultats, assiduité, finances, discipline, emploi du temps.",sev:'Majeur'},
+ ]},
+ { code:'F', title:'Notes, bulletins, IA & élèves à risque',
+   desc:"Saisie des évaluations et calcul des moyennes, génération des bulletins (PDF), appréciations assistées par IA, détection des élèves à risque.",
+   cases:[
+   {id:'F01',obj:"Évaluation & saisie de notes",pre:"grades.write ; classe/matière/trimestre",steps:["Menu « Évaluation & pédagogie › Notes »","Choisir classe → matière → trimestre → « Créer une évaluation »","Saisir les scores (recherche par nom possible) → Enregistrer"],exp:"Notes enregistrées ; message de succès ; recherche par nom disponible.",sev:'Majeur'},
+   {id:'F02',obj:"Marquer un élève absent",pre:"Feuille de notes",steps:["Sur la feuille de notes, cocher « Absent » sur un élève → Enregistrer"],exp:"Score effacé, ligne marquée absente.",sev:'Mineur'},
+   {id:'F03',obj:"Génération des bulletins",pre:"Notes saisies",steps:["Menu « Évaluation & pédagogie › Bulletins »","Choisir classe + trimestre → « Générer »"],exp:"KPI + tableau classé par rang.",sev:'Majeur'},
+   {id:'F04',obj:"Bulletin PDF",pre:"Bulletins générés",steps:["Dans les bulletins générés, cliquer « PDF » sur un élève"],exp:"Le bulletin PDF s'ouvre (logo/signature/tampon repris).",sev:'Majeur'},
+   {id:'F05',obj:"Appréciation IA",pre:"Add-on IA",steps:["Sur un bulletin, bouton « Appréciation » → « Générer (IA) »","Ajuster le texte → Enregistrer"],exp:"Texte généré, modifiable et sauvegardé.",sev:'Mineur'},
+   {id:'F06',obj:"Élèves à risque",pre:"Notes/absences présentes",steps:["Menu « Évaluation & pédagogie › Élèves à risque »","Choisir un trimestre → « Analyser »"],exp:"Tableau : score de risque, moyenne, absences, discipline, facteurs.",sev:'Mineur'},
+ ]},
+ { code:'G', title:'Suivi pédagogique (compétences)',
+   desc:"Module optionnel (add-on) : programmes par compétences, barèmes à niveaux, saisie rapide et groupes de soutien.",
+   cases:[
+   {id:'G01',obj:"Programme + barème",pre:"Add-on Suivi pédagogique",steps:["Menu « Évaluation & pédagogie › Suivi pédagogique » → onglet « Configuration »","Créer un programme (ou « Import Excel ») + un barème"],exp:"Arbre Domaine › Chapitre › Compétence ; barème à niveaux.",sev:'Mineur'},
+   {id:'G02',obj:"Saisie rapide des compétences",pre:"Programme + barème",steps:["Onglet « Saisie rapide » → choisir classe → matière → compétence","Attribuer un niveau par élève → « Tout enregistrer »"],exp:"Évaluations de compétences enregistrées.",sev:'Mineur'},
+   {id:'G03',obj:"Groupe de soutien",pre:"Élèves en difficulté",steps:["Onglet « Difficultés » → cocher des élèves → « Créer un groupe » de soutien"],exp:"Groupe de soutien créé, suivi possible.",sev:'Mineur'},
+ ]},
+ { code:'H', title:'Finances',
+   desc:"Facturation (ponctuelle & mensuelle), encaissements (complet/partiel, multi-mois, avances), dépenses & trésorerie, rapports et reçus PDF. Cloisonnement par rôle (comptable) et confirmation des paiements.",
+   cases:[
+   {id:'H01',obj:"Synthèse : KPI financiers",pre:"finance.read",steps:["Menu « Finances › Finances », vue « Synthèse »","Vérifier les KPI puis appliquer les filtres Site / Niveau / Classe"],exp:"Facturé, Encaissé, À confirmer, Impayés, Taux, par méthode ; filtres site/niveau/classe.",sev:'Majeur'},
+   {id:'H02',obj:"Facturation mensuelle + anti-doublon",pre:"Frais mensuel actif ; élèves confirmés",steps:["Menu « Finances › Finances », vue « Facturation » → choisir mois / année → « Générer »","Relancer la génération sur le même mois"],exp:"« N factures créées » (exemptés = boursiers) ; regénération → « 0 créées, N ignorées ».",sev:'Majeur'},
+   {id:'H03',obj:"Encaissement (Saisie) + filtres de recherche élève",pre:"finance.write",steps:["Menu « Finances › Finances », vue « Encaissements », onglet « Saisie »","Filtrer par Site / Niveau / Classe puis chercher l'élève, ou choisir une classe pour lister ses élèves"],exp:"La recherche est affinée par les filtres ; choisir une classe liste directement ses élèves.",sev:'Majeur'},
+   {id:'H04',obj:"Encaissement multi-mois + avance",pre:"Élève avec impayés",steps:["Sur un élève avec impayés, « Encaisser » un montant supérieur au total dû → Valider"],exp:"Mois soldés (plus anciens d'abord) ; reliquat en avance ; imputé automatiquement au mois suivant.",sev:'Majeur'},
+   {id:'H05',obj:"Paiement partiel sécurisé",pre:"Comptable sans finance.partial_payment",steps:["Connecté en Comptable, encaisser un montant inférieur au solde → constater le blocage","Se reconnecter en DG et refaire l'opération"],exp:"Bloqué en Comptable ; autorisé en DG/délégué.",sev:'Majeur'},
+   {id:'H06',obj:"Encaissement à confirmer",pre:"Coordinateur (sans confirm)",steps:["Connecté en Coordinateur, encaisser un paiement","Se reconnecter en Comptable/DG → « Confirmer » le paiement"],exp:"Paiement « à confirmer » puis bascule vers Encaissé.",sev:'Majeur'},
+   {id:'H07',obj:"Comptable cloisonné (rapport)",pre:"Un agent sans finance.view_all_payments",steps:["Connecté en agent comptable, ouvrir la vue « Rapport »","Comparer avec la vue « Rapport » en DG"],exp:"L'agent ne voit que ses propres encaissements ; le DG voit tout.",sev:'Majeur'},
+   {id:'H08',obj:"Dépenses & trésorerie",pre:"expenses.write",steps:["Menu « Finances › Finances », vue « Dépenses » → choisir une catégorie → « + Nouvelle dépense » (joindre un justificatif)","Vérifier le KPI Entrées − Sorties = Solde"],exp:"Dépense enregistrée, justificatif téléchargeable ; KPI Entrées − Sorties = Solde ; salaires comptés en dépenses.",sev:'Majeur'},
+   {id:'H09',obj:"Facture manuelle + reçu PDF",pre:"finance.write",steps:["Menu « Finances › Finances », vue « Factures » → choisir un élève → « Créer une facture »","« Encaisser » puis ouvrir le reçu PDF"],exp:"Facture + paiement + reçu PDF.",sev:'Majeur'},
+   {id:'H10',obj:"Reçus par lot (PDF)",pre:"Des paiements sur la période",steps:["Vue « Rapport » → « Reçus par lot (PDF) » sur la période"],exp:"PDF avec un reçu par page.",sev:'Mineur'},
+ ]},
+ { code:'I', title:'Personnel & emploi du temps',
+   desc:"Gestion RH (employés, contrats, statuts, salaires/paie, congés) et emplois du temps (vue par classe avec glisser-déposer, vue par salle, génération automatique en option, cahier de textes).",
+   cases:[
+   {id:'I01',obj:"Création d'un employé + statut de salaire",pre:"hr.write",steps:["Menu « Administration › Personnel » → « + Nouveau membre » (nom, type, contrat, salaire, site) → Enregistrer","Onglet « Paie » : marquer un salaire payé"],exp:"Employé créé ; KPI (employés, enseignants, masse salariale) à jour ; statut de salaire payé/en attente/impayé.",sev:'Majeur'},
+   {id:'I02',obj:"Gestion des congés",pre:"Un employé",steps:["Menu « Administration › Personnel », onglet « Congés » → « Nouvelle demande »","« Approuver » / « Rejeter »"],exp:"Statut EN ATTENTE → APPROUVÉ / REJETÉ.",sev:'Mineur'},
+   {id:'I03',obj:"Emploi du temps : ajout + conflit",pre:"timetable.write",steps:["Menu « Scolarité › Emplois du temps » → choisir classe + année","« Ajouter un créneau » (matière, prof, jour, heures, salle)","Ajouter un créneau en conflit d'enseignant et constater le refus","Déplacer un créneau par glisser-déposer"],exp:"Créneau placé ; le conflit est détecté et listé, créneau non enregistré ; glisser-déposer pour déplacer.",sev:'Majeur'},
+   {id:'I04',obj:"Emploi du temps : vue « Par salle »",pre:"Des créneaux avec salle",steps:["Menu « Scolarité › Emplois du temps » → onglet « Par salle »"],exp:"Grille salles × jours (occupation) ; cellule vide = libre ; conflits de salle surlignés ; regroupe « Sans salle ».",sev:'Mineur'},
+   {id:'I05',obj:"Emploi du temps : génération automatique",pre:"Add-on Génération auto ; heures/sem. renseignées",steps:["Menu « Scolarité › Emplois du temps » → bouton « Générer » (visible si l'add-on est activé)","Vérifier la trame + matières (heures/sem + prof) → « Prévisualiser »","Contrôler l'aperçu de la grille → « Enregistrer »"],exp:"Bouton visible seulement si l'add-on est activé ; aperçu de la grille proposée (respecte l'existant, sans double-booking) puis enregistrement.",sev:'Mineur'},
+   {id:'I06',obj:"Cahier de textes",pre:"lessons.write",steps:["Menu « Scolarité › Cahier de textes » → « + Nouveau » (classe, matière, prof, date, titre, devoirs) → Enregistrer"],exp:"Leçon ajoutée (carte avec badges + devoirs).",sev:'Mineur'},
+ ]},
+ { code:'J', title:'Présences & discipline',
+   desc:"Appel quotidien avec motifs d'absence, justification réservée à certains rôles, vue semaine, statistiques par classe puis par élève, incidents disciplinaires.",
+   cases:[
+   {id:'J01',obj:"Motifs d'absence par défaut",pre:"attendance.reason_manage",steps:["Menu « Scolarité › Présences & Discipline » → onglet « Motifs » → « Ajouter les motifs par défaut »"],exp:"7 motifs créés (Maladie, Décès, RDV parent, École, Paiement, Renvoyé, Autre).",sev:'Mineur'},
+   {id:'J02',obj:"Appel + motif + historique J-1/J-2",pre:"attendance.write",steps:["Menu « Scolarité › Présences & Discipline », onglet « Appel » → choisir classe + date","Marquer un élève « Absent » + choisir un motif"],exp:"Motif + commentaire enregistrés ; colonnes J-1/J-2 affichées.",sev:'Majeur'},
+   {id:'J03',obj:"Absence non justifiée + à convoquer",pre:"Feuille d'appel",steps:["Onglet « Appel » → marquer un élève « Absent » sans motif","Observer le badge et la case"],exp:"Badge « Non justifiée » + case « À convoquer ».",sev:'Majeur'},
+   {id:'J04',obj:"Justification réservée (chef de classe)",pre:"Connecté en Chef de classe",steps:["Connecté en Chef de classe, faire l'appel et marquer un « Excusé »"],exp:"L'absence n'est pas considérée justifiée (réservé Coordinateur/Surveillant).",sev:'Majeur'},
+   {id:'J05',obj:"Statistiques par classe → détail par élève",pre:"Des appels enregistrés",steps:["Onglet « Statistiques » → vue par classe","Cliquer une classe pour ouvrir le détail par élève"],exp:"Vue par classe (absences, retards, non justifiés, taux) ; le clic ouvre le détail par élève (présent/absent/retard/taux).",sev:'Majeur'},
+   {id:'J06',obj:"Vue semaine & dashboard",pre:"Des appels",steps:["Onglet « Semaine » → filtrer période / niveau / classe"],exp:"KPI du jour + tableau trié par absences décroissantes + élèves à risque.",sev:'Mineur'},
+   {id:'J07',obj:"Incident disciplinaire",pre:"discipline.write",steps:["Onglet « Discipline » → « + Nouvel incident » (type, motif)"],exp:"Incident ajouté à l'historique de l'élève.",sev:'Mineur'},
+ ]},
+ { code:'K', title:'Boutique scolaire',
+   desc:"Module optionnel (premium) de vente d'articles (fournitures, tenues…). Catalogue avec déclinaisons et stock, achats internes/externes avec encaissement et livraison, suivi des articles obligatoires, reporting et export Excel des achats.",
+   cases:[
+   {id:'K01',obj:"Verrouillage par formule",pre:"Tenant NON premium",steps:["Connecté sur un tenant NON premium, chercher « Boutique scolaire » dans le menu","Comparer avec un tenant premium (module visible sous « Finances »)"],exp:"Le module n'apparaît pas si la formule ne l'inclut pas ; visible et accessible en premium.",sev:'Majeur'},
+   {id:'K02',obj:"Catalogue : article simple + stock",pre:"boutique.manage_catalog",steps:["Menu « Finances › Boutique scolaire », onglet « Catalogue » → « + Nouvel article » (nom, description, prix, catégorie)","Activer « Gérer le stock » (sans variantes) → saisir stock + seuil d'alerte → Enregistrer"],exp:"Article créé ; description affichée sur la carte ; badge Stock / Stock bas / Rupture.",sev:'Majeur'},
+   {id:'K03',obj:"Catalogue : déclinaisons + stock + plafond",pre:"boutique.manage_catalog",steps:["Onglet « Catalogue » → « + Nouvel article » → activer « Gérer le stock » puis « a des variantes »","Saisir le nom de la déclinaison (ex. Taille) → ajouter S / M / L avec leur stock","Renseigner le stock total (plafond)"],exp:"Chaque valeur a son stock ; les libellés/aides suivent le nom choisi (ex. « somme des tailles ») ; la somme ne peut pas dépasser le plafond (bloquant).",sev:'Majeur'},
+   {id:'K04',obj:"Nouvel achat + déclinaison + stock",pre:"boutique.create_sale",steps:["Onglet « Achats » → « + Nouvel achat » : acheteur (interne / externe) + article","Choisir la déclinaison (ex. taille) → valider"],exp:"Le choix de la déclinaison est requis ; le stock est affiché ; il décrémente à la vente (avertissement si insuffisant, non bloquant).",sev:'Majeur'},
+   {id:'K05',obj:"Paiement complet / partiel / impayé",pre:"Un achat en cours",steps:["Dans l'achat, section « Encaissement » → « Tout payer » / saisir un montant / « Impayé »"],exp:"Badge de statut Payé / Partiel / Impayé cohérent ; reste calculé ; mise en page lisible (pas de chevauchement).",sev:'Majeur'},
+   {id:'K06',obj:"Livraison des achats",pre:"Un achat",steps:["Onglet « Achats » → colonne « Livraison » → « Marquer livré » (date)","Filtrer Livré / Non livré"],exp:"Statut Livré/Non livré + date (indépendant du paiement) ; filtre fonctionnel ; KPI « À livrer » au tableau de bord.",sev:'Majeur'},
+   {id:'K07',obj:"Suivi des articles obligatoires",pre:"Un article obligatoire ciblé",steps:["Onglet « Suivi élèves » → choisir un article obligatoire"],exp:"Liste des élèves cibles : qui a acheté / qui n'a pas acheté (calculé, sans commande vide).",sev:'Mineur'},
+   {id:'K08',obj:"Reporting + export Excel des achats",pre:"boutique.view_reports",steps:["Onglet « Reporting » → « Exporter les achats »","OU onglet « Achats » → appliquer les filtres (période / classe / article / statut / livraison) → « Exporter »"],exp:"Fichier .xlsx : 1 ligne par article (date, élève, classe, article, déclinaison, quantité, prix, paiement, livraison) ; l'export depuis Achats respecte les filtres.",sev:'Majeur'},
+ ]},
+ { code:'L', title:'Modules annexes',
+   desc:"Services optionnels (formule annexes) : bibliothèque, cantine, transport, internat, infirmerie.",
+   cases:[
+   {id:'L01',obj:"Bibliothèque : emprunt / retour",pre:"library.write ; formule annexes",steps:["Menu « Vie scolaire › Bibliothèque » → « + Ajouter un livre » (quantité)","« Emprunter » (livre + élève) → « Retourner »"],exp:"Stock −1 à l'emprunt, +1 au retour ; suppression bloquée si emprunt en cours.",sev:'Majeur'},
+   {id:'L02',obj:"Cantine : abonnement",pre:"canteen.write",steps:["Menu « Vie scolaire › Cantine » → « Abonner » un élève → « Annuler » / « Réactiver »"],exp:"KPI actifs/revenu à jour ; statut basculé.",sev:'Mineur'},
+   {id:'L03',obj:"Transport : ligne + affectation",pre:"transport.write",steps:["Menu « Vie scolaire › Transport » → « Créer une ligne » → « Affecter » un élève (arrêt)"],exp:"Élève rattaché ; suppression de ligne bloquée si élèves affectés.",sev:'Mineur'},
+   {id:'L04',obj:"Internat : dortoir plein",pre:"boarding.write",steps:["Menu « Vie scolaire › Internat » → « Créer un dortoir » (capacité)","Affecter des élèves au-delà de la capacité"],exp:"Refus « Dortoir complet (capacité N) ».",sev:'Mineur'},
+   {id:'L05',obj:"Infirmerie : visite médicale",pre:"infirmary.write",steps:["Menu « Vie scolaire › Infirmerie » → « Enregistrer une visite » (motif, température ≥ 38 °C)"],exp:"Visite ajoutée ; badge fièvre rouge ; infos médicales affichées.",sev:'Mineur'},
+ ]},
+ { code:'M', title:'Documents, import/export & notifications',
+   desc:"Génération de documents officiels (certificats, attestations, carte scolaire), import/export Excel en masse, diffusion de notifications ciblées.",
+   cases:[
+   {id:'M01',obj:"Génération de documents (PDF/Word)",pre:"documents.read",steps:["Menu « Administration › Documents » → rechercher / filtrer l'élève","Générer PDF (certificat / attestation / carte) puis Word"],exp:"PDF ouvert ; .docx téléchargé ; logo/signature/tampon repris.",sev:'Majeur'},
+   {id:'M02',obj:"Import Excel élèves",pre:"students.write ; formule importExport",steps:["Menu « Administration › Import / Export » → « Télécharger le modèle »","Remplir le modèle → « Importer »"],exp:"Rapport : Créés / Ignorés / Avertissements + erreurs ligne par ligne.",sev:'Majeur'},
+   {id:'M03',obj:"Export Excel (élèves / personnel / impayés)",pre:"Droits de lecture",steps:["Menu « Administration › Import / Export » → section « Export » → choisir le jeu (élèves / personnel / impayés)"],exp:"Téléchargement du fichier Excel.",sev:'Mineur'},
+   {id:'M04',obj:"Persistance des fichiers (cloud)",pre:"Photo élève + justificatif importés",steps:["Importer une photo d'élève et un justificatif","Recharger l'application (F5) et rouvrir la fiche"],exp:"Les fichiers restent accessibles (stockage cloud, non perdus au redémarrage).",sev:'Mineur'},
+   {id:'M05',obj:"Notifications ciblées + filtres liés",pre:"notifications.send",steps:["Menu « Administration › Notifications » → cocher un groupe","Cocher un site puis un niveau → « Envoyer »"],exp:"Niveaux/classes limités au site puis au niveau ; « N destinataires ».",sev:'Majeur'},
+   {id:'M06',obj:"Réception d'une notification",pre:"Une notification envoyée",steps:["Se reconnecter en destinataire → ouvrir la cloche de notifications"],exp:"L'annonce apparaît ; marquable comme lue.",sev:'Mineur'},
+ ]},
+ { code:'N', title:'Transverse (ergonomie, multilingue, thème)',
+   desc:"Comportements globaux : navigation regroupée, multilingue FR/EN/AR (RTL), thème clair/sombre, couleur de marque, responsive mobile.",
+   cases:[
+   {id:'N01',obj:"Menu latéral regroupé (accordéon)",pre:"Connecté",steps:["Observer le menu latéral : sections repliables","Replier / déplier une section puis naviguer vers une autre page"],exp:"6 sections (Accueil, Scolarité, Évaluation & pédagogie, Finances, Vie scolaire, Administration) ; état mémorisé ; la section de la page active s'ouvre ; seules les sections avec au moins une entrée autorisée s'affichent.",sev:'Mineur'},
+   {id:'N02',obj:"Multilingue FR / EN / AR",pre:"Langues activées",steps:["Via le sélecteur de langue, basculer FR → EN → AR"],exp:"Traduction complète ; l'arabe passe en mise en page droite-à-gauche (RTL).",sev:'Mineur'},
+   {id:'N03',obj:"Thème clair / sombre / couleur de marque",pre:"Connecté",steps:["Basculer le thème (clair / sombre)","Définir une couleur de marque (Administration › Paramètres)"],exp:"Le thème et la couleur s'appliquent partout (menu actif, boutons, badges) et restent lisibles en clair et sombre.",sev:'Mineur'},
+   {id:'N04',obj:"Responsive mobile",pre:"Écran étroit / mobile",steps:["Ouvrir l'application sur un écran étroit / mobile → menu hamburger","Ouvrir une boîte de dialogue longue et faire défiler"],exp:"Menu de navigation accessible ; les dialogues défilent sans écrasement/chevauchement des champs.",sev:'Mineur'},
+ ]},
+];
+
+/* ===================== RENDU ===================== */
+const KEY = 'recette_kekole_v1';
+const store = (()=>{ try{return JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){return {}} })();
+const save = ()=>{ try{localStorage.setItem(KEY,JSON.stringify(store))}catch(e){} };
+const esc = (s)=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let filter = null; // 'ok'|'ko'|'imp'|'none'|null
+let query = ''; let modFilter = '';
+
+const app = document.getElementById('app');
+const toc = document.getElementById('toc');
+
+function allCases(){ return SECTIONS.flatMap(s=>s.cases.map(c=>({...c, section:s}))); }
+
+function render(){
+  app.innerHTML='';
+  const modsel = document.getElementById('modsel');
+  if(!modsel.dataset.filled){ SECTIONS.forEach(s=>{ const o=document.createElement('option'); o.value=s.code; o.textContent=s.code+'. '+s.title; modsel.appendChild(o); }); modsel.dataset.filled='1'; }
+  toc.innerHTML='';
+  SECTIONS.forEach(sec=>{
+    if(modFilter && sec.code!==modFilter) return;
+    const visibleCases = sec.cases.filter(c=>matches(c,sec));
+    if(!visibleCases.length) return;
+    const a=document.createElement('a'); a.href='#mod-'+sec.code; a.textContent=sec.code+'. '+sec.title; toc.appendChild(a);
+    const mod=document.createElement('section'); mod.className='mod'; mod.id='mod-'+sec.code;
+    mod.innerHTML = `<div class="mod-h"><div class="num">${sec.code}</div><div><h2>${esc(sec.title)}</h2><p>${esc(sec.desc)}</p></div><div class="cnt">${visibleCases.length} test(s)</div></div>`;
+    visibleCases.forEach(c=>{
+      const st = store[c.id]||{};
+      const div=document.createElement('div'); div.className='case'; div.id='case-'+c.id;
+      div.innerHTML = `
+        <div class="case-top">
+          <span class="case-id">REC-${c.id}</span>
+          <span class="case-obj">${esc(c.obj)}</span>
+          <span class="sev ${c.sev}">${c.sev}</span>
+        </div>
+        <div class="kv">
+          ${c.pre?`<div class="k">Prérequis</div><div>${esc(c.pre)}</div>`:''}
+          <div class="k">Étapes</div><div><ol>${c.steps.map(s=>`<li>${esc(s)}</li>`).join('')}</ol></div>
+          <div class="k">Résultat attendu</div><div class="exp">${esc(c.exp)}</div>
+        </div>
+        <div class="verdict">
+          <button class="v-btn" data-sel="ok"  aria-pressed="${st.v==='ok'}">✔ OK</button>
+          <button class="v-btn" data-sel="ko"  aria-pressed="${st.v==='ko'}">✗ KO</button>
+          <button class="v-btn" data-sel="imp" aria-pressed="${st.v==='imp'}">▲ À améliorer</button>
+          <textarea class="note" placeholder="Note / anomalie constatée…">${esc(st.note||'')}</textarea>
+        </div>`;
+      div.querySelectorAll('.v-btn').forEach(b=>b.addEventListener('click',()=>{
+        const v=b.dataset.sel; store[c.id]=store[c.id]||{}; store[c.id].v = (store[c.id].v===v?null:v); save();
+        div.querySelectorAll('.v-btn').forEach(x=>x.setAttribute('aria-pressed', String(x.dataset.sel===store[c.id].v))); updateStats();
+      }));
+      div.querySelector('.note').addEventListener('input',e=>{ store[c.id]=store[c.id]||{}; store[c.id].note=e.target.value; save(); });
+      mod.appendChild(div);
+    });
+    app.appendChild(mod);
+  });
+  updateStats();
+}
+function matches(c,sec){
+  if(filter){ const v=(store[c.id]||{}).v||'none'; if(v!==filter) return false; }
+  if(query){ const h=(c.id+' '+c.obj+' '+c.exp+' '+sec.title+' '+(c.pre||'')).toLowerCase(); if(!h.includes(query)) return false; }
+  return true;
+}
+function updateStats(){
+  const cs=allCases(); let ok=0,ko=0,imp=0;
+  cs.forEach(c=>{ const v=(store[c.id]||{}).v; if(v==='ok')ok++; else if(v==='ko')ko++; else if(v==='imp')imp++; });
+  const n=cs.length, none=n-ok-ko-imp;
+  document.getElementById('s-ok').textContent='✔ OK '+ok;
+  document.getElementById('s-ko').textContent='✗ KO '+ko;
+  document.getElementById('s-imp').textContent='▲ À améliorer '+imp;
+  document.getElementById('s-none').textContent='○ Non testé '+none;
+  document.getElementById('p-ok').style.width=(ok/n*100)+'%';
+  document.getElementById('p-ko').style.width=(ko/n*100)+'%';
+  document.getElementById('p-imp').style.width=(imp/n*100)+'%';
+}
+document.querySelectorAll('.chip').forEach(ch=>ch.addEventListener('click',()=>{
+  const f=ch.dataset.f; filter = (filter===f?null:f);
+  document.querySelectorAll('.chip').forEach(x=>x.setAttribute('data-on', String(x.dataset.f===filter))); render();
+}));
+document.getElementById('q').addEventListener('input',e=>{ query=e.target.value.trim().toLowerCase(); render(); });
+document.getElementById('modsel').addEventListener('change',e=>{ modFilter=e.target.value; render(); });
+document.getElementById('btn-print').addEventListener('click',()=>window.print());
+document.getElementById('btn-reset').addEventListener('click',()=>{ if(confirm('Effacer tous les statuts et notes saisis ?')){ for(const k in store){ if(k!=='__meta') delete store[k]; } save(); render(); } });
+/* Identification testeur / date / version */
+const META = store.__meta || (store.__meta = {});
+[['tester','tester'],['tdate','date'],['tver','ver']].forEach(([id,key])=>{
+  const el=document.getElementById(id); if(!el) return;
+  el.value = META[key]||''; el.addEventListener('input',()=>{ META[key]=el.value; save(); });
+});
+document.getElementById('btn-export').addEventListener('click',()=>{
+  const m=store.__meta||{};
+  const rows=[['Testeur',m.tester||''],['Date',m.date||''],['Version testée',m.ver||''],[''],['ID','Module','Objectif','Sévérité','Statut','Note']];
+  const label={ok:'OK',ko:'KO',imp:'À améliorer'};
+  allCases().forEach(c=>{ const st=store[c.id]||{}; rows.push(['REC-'+c.id,c.section.code+'. '+c.section.title,c.obj,c.sev,label[st.v]||'Non testé',(st.note||'').replace(/\r?\n/g,' ')]); });
+  const csv='﻿'+rows.map(r=>r.map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(';')).join('\r\n');
+  const blob=new Blob([csv],{type:'text/csv;charset=utf-8'}); const url=URL.createObjectURL(blob);
+  const a=document.createElement('a'); a.href=url; a.download='recette-k-ekole.csv'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+});
+/* thème */
+const tt=document.getElementById('theme-toggle');
+function applyTheme(m){ if(m) document.documentElement.setAttribute('data-theme',m); try{localStorage.setItem('recette_theme',m||'')}catch(e){} }
+tt.addEventListener('click',()=>{ const cur=document.documentElement.getAttribute('data-theme'); applyTheme(cur==='dark'?'light':'dark'); });
+(function(){ let m; try{m=localStorage.getItem('recette_theme')}catch(e){} if(m) document.documentElement.setAttribute('data-theme',m); })();
+render();
+</script>
+</body>
+</html>
